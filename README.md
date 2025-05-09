@@ -1,6 +1,6 @@
-# Model Weights Viewer
+# ML Model Weights Viewer
 
-A desktop application for visualizing model weights.
+A desktop application for visualizing model weights of ML models.
 
 
 ![image](https://github.com/user-attachments/assets/17aa23a9-c33e-4762-a95d-9f562e6511d5)
