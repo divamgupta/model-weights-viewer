@@ -2,6 +2,10 @@
 
 A desktop application for visualizing model weights.
 
+
+![image](https://github.com/user-attachments/assets/17aa23a9-c33e-4762-a95d-9f562e6511d5)
+
+
 ## Introduction
 Model Weights Viewer is a tool that lets you easily view and explore the weights of machine learning models. It helps you see and understand the layers inside the model.
 
