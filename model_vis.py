@@ -3,6 +3,7 @@ import json
 import re
 from collections import defaultdict
 from safetensors import safe_open
+import torch 
 # Define supported file extensions globally
 SUPPORTED_FILE_EXTS = ['.safetensors']
 

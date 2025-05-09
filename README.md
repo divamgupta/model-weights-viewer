@@ -1,44 +1,54 @@
-# Model Weights Visualizer
+# Model Weights Viewer
 
-A desktop application for visualizing model weights in SafeTensor format.
+A desktop application for visualizing model weights.
 
-## Building the Application
+## Introduction
+Model Weights Viewer is a tool that lets you easily view and explore the weights of machine learning models. It helps you see and understand the layers inside the model.
 
-### Prerequisites
+## Features
 
-- Python 3.6 or higher
-- pip (Python package installer)
+- Interactive visualization of weight tensors
 
-### Building on macOS
+## Installation
 
-1. **Prepare the Icon** (Optional)
-   - Place a 1024x1024 PNG image named `icon_1024.png` in the project directory
-   - Run the icon creation script:
-     ```
-     chmod +x create_icns.sh
-     ./create_icns.sh
-     ```
+```bash
+# Clone the repository
+git clone https://github.com/divamgupta/model-weights-viewer.git
+cd model-weights-visualizer
 
-2. **Build the Application**
-   - Make the build script executable:
-     ```
-     chmod +x build.sh
-     ```
-   - Run the build script:
-     ```
-     ./build.sh
-     ```
+# Install dependencies
+pip install -r requirements.txt
 
-3. **After Building**
-   - The finished application will be in the `dist` folder as `Model Weights Visualizer.app`
-   - You can move this .app file to your Applications folder or distribute it
+# Alternatively, install packages directly
+pip install PyQt5 PyQtWebEngine Pillow torch safetensors
+
+# Launch the application
+python app.py
+
+# Building the application 
+
+bash build.sh
+
+```
 
 ## Usage
 
-1. Open the application
-2. Use the "Open File" button or drag and drop SafeTensor files
-3. View the visualization of model weights
+1. Launch the application.
+2. Choose a SafeTensors file using **File > Open** or drag and drop the file into the application window.
+3. Explore and visualize the model weights using the provided interface.
 
-## Supported File Types
+## Supported Formats (TODO)
 
-- `.safetensors` - SafeTensor model weight files
+- [x] SafeTensors (.safetensors)
+- [ ] PyTorch models (.pt, .pth)
+- [ ] TensorFlow checkpoints (.ckpt)
+- [ ] ONNX models (.onnx)
+
+
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+
+
