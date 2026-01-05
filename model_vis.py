@@ -5,7 +5,7 @@ from collections import defaultdict
 from safetensors import safe_open
 import torch 
 # Define supported file extensions globally
-SUPPORTED_FILE_EXTS = ['.safetensors']
+SUPPORTED_FILE_EXTS = ['.safetensors', '.pt', '.pth']
 
 def calculate_params(shape):
     """Calculate the number of parameters based on shape"""
@@ -97,7 +97,7 @@ def generate_html(hierarchy):
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>PyTorch State Dict Visualizer</title>
+        <title>Model Weights Visualizer</title>
         <style>
             body {
                 font-family: Arial, sans-serif;
@@ -241,12 +241,77 @@ def generate_html(hierarchy):
     return html
 
 
-def model_file_vis(safetensors_file):
+def load_pytorch_state_dict(filepath):
+    """Load PyTorch state dict and extract keys and shapes"""
     keys_and_shapes = ""
     
-    with safe_open(safetensors_file, framework="pt", device=0) as f:
+    try:
+        # Load the state dict with weights_only=False for compatibility
+        try:
+            state_dict = torch.load(filepath, map_location='cpu', weights_only=False)
+        except TypeError:
+            # Fallback for older PyTorch versions that don't have weights_only parameter
+            state_dict = torch.load(filepath, map_location='cpu')
+        
+        # Handle different PyTorch file formats
+        if isinstance(state_dict, dict):
+            # Check if it's a checkpoint with 'state_dict' key
+            if 'state_dict' in state_dict:
+                model_state = state_dict['state_dict']
+            elif 'model' in state_dict:
+                model_state = state_dict['model']
+            elif 'model_state_dict' in state_dict:
+                model_state = state_dict['model_state_dict']
+            else:
+                # Assume the entire dict is the state dict
+                model_state = state_dict
+        else:
+            # If it's not a dict, assume it's the model itself
+            if hasattr(state_dict, 'state_dict'):
+                model_state = state_dict.state_dict()
+            else:
+                raise ValueError("Unable to extract state dict from the loaded file")
+        
+        # Verify that model_state is a dictionary
+        if not isinstance(model_state, dict):
+            raise ValueError("Extracted state dict is not a dictionary")
+        
+        # Extract keys and shapes
+        for key, tensor in model_state.items():
+            if hasattr(tensor, 'shape'):
+                keys_and_shapes += f"{key} -> {list(tensor.shape)}\n"
+            elif hasattr(tensor, 'size'):
+                keys_and_shapes += f"{key} -> {list(tensor.size())}\n"
+            else:
+                keys_and_shapes += f"{key} -> []\n"
+    
+    except Exception as e:
+        raise Exception(f"Error loading PyTorch file '{filepath}': {str(e)}")
+    
+    return keys_and_shapes
+
+
+def load_safetensors_file(filepath):
+    """Load safetensors file and extract keys and shapes"""
+    keys_and_shapes = ""
+    
+    with safe_open(filepath, framework="pt", device=0) as f:
         for k in f.keys():
-            keys_and_shapes +=  k + " -> " + str(f.get_slice(k).get_shape()) + "\n"
+            keys_and_shapes += k + " -> " + str(f.get_slice(k).get_shape()) + "\n"
+    
+    return keys_and_shapes
+
+
+def model_file_vis(model_file):
+    """Visualize model file (safetensors or PyTorch)"""
+    file_extension = model_file.lower().split('.')[-1]
+    
+    if file_extension == 'safetensors':
+        keys_and_shapes = load_safetensors_file(model_file)
+    elif file_extension in ['pt', 'pth']:
+        keys_and_shapes = load_pytorch_state_dict(model_file)
+    else:
+        raise ValueError(f"Unsupported file extension: {file_extension}")
     
     # Build hierarchy and generate HTML
     hierarchy = build_hierarchy(keys_and_shapes)

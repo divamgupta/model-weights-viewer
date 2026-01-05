@@ -38,13 +38,14 @@ bash build.sh
 ## Usage
 
 1. Launch the application.
-2. Choose a SafeTensors file using **File > Open** or drag and drop the file into the application window.
+2. Choose a model file using **File > Open** or drag and drop the file into the application window.
+   - Supported formats: SafeTensors (.safetensors), PyTorch (.pt, .pth)
 3. Explore and visualize the model weights using the provided interface.
 
-## Supported Formats (TODO)
+## Supported Formats
 
 - [x] SafeTensors (.safetensors)
-- [ ] PyTorch models (.pt, .pth)
+- [x] PyTorch models (.pt, .pth)
 - [ ] TensorFlow checkpoints (.ckpt)
 - [ ] ONNX models (.onnx)
 

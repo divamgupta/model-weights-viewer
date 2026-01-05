@@ -7,7 +7,7 @@ from PyQt5.QtCore import QUrl, Qt
 from PyQt5.QtGui import QIcon, QKeySequence, QDragEnterEvent, QDropEvent
 from model_vis import model_file_vis as file_vis
 
-SUPPORTED_FILE_EXTS = ['.safetensors']
+SUPPORTED_FILE_EXTS = ['.safetensors', '.pt', '.pth']
 
 # Get application path (works for both regular Python and PyInstaller)
 def get_application_path():
